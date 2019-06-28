@@ -50,7 +50,7 @@ export default class Dashboard extends Component {
 
   postMatchNotes = (event, matchId) => {
     event.preventDefault();
-    const match = this.state.matchNotes[matchId]
+    const match = this.state.matchNotes[matchId];
     fetch(`${config.API_ENDPOINT}/match`, {
       headers: {
         'content-type': 'application/json',

@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { Input, Required, Label } from '../Form/Form'
-import AuthApiService from '../../services/auth-api-service'
-import Button from '../Button/Button'
-import './RegistrationForm.css'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Input, Required, Label } from '../Form/Form';
+import AuthApiService from '../../services/auth-api-service';
+import Button from '../Button/Button';
+import './RegistrationForm.css';
 
 class RegistrationForm extends Component {
   static defaultProps = {
@@ -15,30 +15,31 @@ class RegistrationForm extends Component {
   firstInput = React.createRef()
 
   handleSubmit = ev => {
-    ev.preventDefault()
-    const { name, username, password } = ev.target
+    ev.preventDefault();
+    const { name, steamid, username, password } = ev.target;
     AuthApiService.postUser({
       name: name.value,
+      steamid: steamid.value,
       username: username.value,
       password: password.value,
     })
       .then(user => {
-        name.value = ''
-        username.value = ''
-        password.value = ''
-        this.props.onRegistrationSuccess()
+        name.value = '';
+        username.value = '';
+        password.value = '';
+        this.props.onRegistrationSuccess();
       })
       .catch(res => {
-        this.setState({ error: res.error })
-      })
+        this.setState({ error: res.error });
+      });
   }
 
   componentDidMount() {
-    this.firstInput.current.focus()
+    this.firstInput.current.focus();
   }
 
   render() {
-    const { error } = this.state
+    const { error } = this.state;
     return (
       <form
         onSubmit={this.handleSubmit}
@@ -54,6 +55,17 @@ class RegistrationForm extends Component {
             ref={this.firstInput}
             id='registration-name-input'
             name='name'
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor='registration-steamid-input'>
+            Enter your Steam32 Id<Required />
+          </Label>
+          <Input
+            ref={this.firstInput}
+            id='registration-steamid-input'
+            name='steamid'
             required
           />
         </div>
@@ -86,8 +98,8 @@ class RegistrationForm extends Component {
           <Link to='/login'>Already have an account?</Link>
         </footer>
       </form>
-    )
+    );
   }
 }
 
-export default RegistrationForm
+export default RegistrationForm;
