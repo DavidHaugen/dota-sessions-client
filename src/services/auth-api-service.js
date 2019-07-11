@@ -1,5 +1,5 @@
-import config from '../config'
-import TokenService from './token-service'
+import config from '../config';
+import TokenService from './token-service';
 
 const AuthApiService = {
   postUser(user) {
@@ -14,7 +14,7 @@ const AuthApiService = {
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
-      )
+      );
   },
   postLogin({ username, password }) {
     return fetch(`${config.API_ENDPOINT}/auth/token`, {
@@ -28,7 +28,7 @@ const AuthApiService = {
         (!res.ok)
           ? res.json().then(err => Promise.reject(err))
           : res.json()
-      )
+      );
   },
   refreshToken() {
     return fetch(`${config.API_ENDPOINT}/auth/token`, {
@@ -41,8 +41,8 @@ const AuthApiService = {
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
-      )
+      );
   },
-}
+};
 
-export default AuthApiService
+export default AuthApiService;

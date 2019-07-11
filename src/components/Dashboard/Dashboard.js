@@ -51,19 +51,20 @@ export default class Dashboard extends Component {
   postMatchNotes = (event, matchId) => {
     event.preventDefault();
     const match = this.state.matchNotes[matchId];
+    console.log(matchId, match);
     fetch(`${config.API_ENDPOINT}/match`, {
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`
       },
       method: 'POST',
-      body: {
-        match_id: matchId,
+      body: JSON.stringify({
+        matchId: matchId,
         happy: match.happy,
         work: match.work,
         question: match.question,
         notes: match.notes
-      }
+      })
     })
       .then(res => res.json())
       .then(res => console.log(res));  
@@ -100,7 +101,7 @@ export default class Dashboard extends Component {
 
   paragraphHasContent = (matchId, field) => {
     if(this.state.matchNotes[matchId] && this.state.matchNotes[matchId][field]){
-      return 'hidden';
+      // return 'hidden';
     }
   }
 
