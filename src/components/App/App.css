@@ -20,7 +20,10 @@ section{
 }
 
 .matchInfo{
-  width: 100%
+  width: 100%;
+  border: 2px black solid;
+  margin: 5px;
+  padding: 10px;
 }
 
 .hidden{

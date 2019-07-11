@@ -87,8 +87,11 @@ export default class Dashboard extends Component {
     this.setState({matchNotes: {...this.state.matchNotes, [matchId]: {...this.state.matchNotes[matchId], notes: `${event.target.value}`}}});
   }
 
-  enableEditing = (matchId) => {
+  enableEditing = (matchId, e) => {
+    e.preventDefault();
+    console.log('editing', matchId);
     const inputs = document.getElementsByClassName(`${matchId}-input`);
+    console.log(inputs);
     for(let i = 0; i < inputs.length; i++){
       inputs[i].classList.remove('hidden');
     }
@@ -97,11 +100,28 @@ export default class Dashboard extends Component {
     for(let i = 0; i < paragraphs.length; i++){
       paragraphs[i].classList.add('hidden');
     }
+
+    document.getElementById(`${matchId}-cancel-button`).classList.remove('hidden');
+  }
+
+  disableEditing = (matchId, e) => {
+    e.preventDefault();
+    const inputs = document.getElementsByClassName(`${matchId}-input`);
+    for(let i = 0; i < inputs.length; i++){
+      inputs[i].classList.add('hidden');
+    }
+
+    const paragraphs = document.getElementsByClassName(`${matchId}-paragraph`);
+    for(let i = 0; i < paragraphs.length; i++){
+      paragraphs[i].classList.remove('hidden');
+    }
+
+    document.getElementById(`${matchId}-cancel-button`).classList.add('hidden');
   }
 
   paragraphHasContent = (matchId, field) => {
     if(this.state.matchNotes[matchId] && this.state.matchNotes[matchId][field]){
-      // return 'hidden';
+      return 'hidden';
     }
   }
 
@@ -116,26 +136,27 @@ export default class Dashboard extends Component {
           <p>Match Id: {match.match_id}</p>
           <form className='match-feedback' onSubmit={(event, matchId) => this.postMatchNotes(event, match.match_id)}>
             <label>Happy
-              <p className={`${match.match_id}-paragraph`}onClick={()=> this.enableEditing(match.match_id)}>{this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].happy : null}</p>
-              <input type='text' onChange={(event, matchId) => this.updateHappy(event, match.match_id)} className={`${match.match_id}-input ${this.paragraphHasContent(match.match_id, 'happy')}`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].happy : ''}></input>
+              <p className={`${match.match_id}-paragraph`}>{this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].happy : null}</p>
+              <input type='text' onChange={(event, matchId) => this.updateHappy(event, match.match_id)} className={`${match.match_id}-input hidden`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].happy : ''}></input>
             </label>
             <br />
             <label>Work
               <p className={`${match.match_id}-paragraph`}>{this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].work : null}</p>
-              <input type='text' onChange={(event, matchId) => this.updateWork(event, match.match_id)} className={`${match.match_id}-input ${this.paragraphHasContent(match.match_id, 'work')}`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].work : ''}></input>
+              <input type='text' onChange={(event, matchId) => this.updateWork(event, match.match_id)} className={`${match.match_id}-input hidden`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].work : ''}></input>
             </label>
             <br />
             <label>Question
               <p className={`${match.match_id}-paragraph`}>{this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].question : null}</p>
-              <input type='text' onChange={(event, matchId) => this.updateQuestion(event, match.match_id)} className={`${match.match_id}-input ${this.paragraphHasContent(match.match_id, 'question')}`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].question : ''}></input>
+              <input type='text' onChange={(event, matchId) => this.updateQuestion(event, match.match_id)} className={`${match.match_id}-input hidden`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].question : ''}></input>
             </label>
             <br />
             <label>Notes
               <p className={`${match.match_id}-paragraph`}>{this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].notes : null}</p>
-              <input type='text' onChange={(event, matchId) => this.updateNotes(event, match.match_id)} className={`${match.match_id}-input ${this.paragraphHasContent(match.match_id, 'notes')}`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].notes : ''}></input>
+              <input type='text' onChange={(event, matchId) => this.updateNotes(event, match.match_id)} className={`${match.match_id}-input hidden`} value={this.state.matchNotes[match.match_id] ? this.state.matchNotes[match.match_id].notes : ''}></input>
             </label>
+            <button onClick={e => this.enableEditing(match.match_id, e)}>Edit</button>
             <button type='submit'>Submit</button>
-            <button type='reset'>Cancel</button>
+            <button onClick={e => this.disableEditing(match.match_id, e)} className='hidden' id={`${match.match_id}-cancel-button`}>Cancel</button>
           </form>
         </div>
       )
